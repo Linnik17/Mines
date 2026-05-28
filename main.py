@@ -6,7 +6,7 @@ from aiogram.client.default import DefaultBotProperties
 
 from detector import generate_signal
 
-TOKEN = "YOUR_BOT_TOKEN"
+TOKEN = "8910895596:AAG5KfMwTUGvTmFYUGhQhf52b0tQb3NENug"
 
 bot = Bot(
     token=TOKEN,
