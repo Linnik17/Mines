@@ -1,11 +1,10 @@
-name: Bot
+name: Mines AI Bot
 
 on:
   workflow_dispatch:
-  push:
 
 jobs:
-  run-bot:
+  bot:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,10 +16,10 @@ jobs:
       with:
         python-version: "3.11"
 
-    - name: Install dependencies
+    - name: Install
       run: pip install -r requirements.txt
 
-    - name: Start Bot
+    - name: Run Bot
       run: python main.py
       env:
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
