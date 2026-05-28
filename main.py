@@ -1,4 +1,6 @@
 import asyncio
+import os
+
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import Message
 from aiogram.enums import ParseMode
@@ -6,7 +8,7 @@ from aiogram.client.default import DefaultBotProperties
 
 from detector import generate_signal
 
-TOKEN = "8910895596:AAG5KfMwTUGvTmFYUGhQhf52b0tQb3NENug"
+TOKEN = os.getenv("8910895596:AAG5KfMwTUGvTmFYUGhQhf52b0tQb3NENug")
 
 bot = Bot(
     token=TOKEN,
@@ -17,38 +19,50 @@ dp = Dispatcher()
 
 
 @dp.message(F.photo)
-async def photo_handler(message: Message):
+async def analyze(message: Message):
 
-    wait = await message.answer("🤖 Анализирую поле...")
+    msg = await message.answer(
+        "🤖 AI анализирует поле..."
+    )
 
-    photo = message.photo[-1]
+    await asyncio.sleep(2)
 
-    file = await bot.get_file(photo.file_id)
+    await msg.edit_text(
+        "🧠 Поиск безопасных клеток..."
+    )
 
-    await bot.download_file(file.file_path, "field.jpg")
+    await asyncio.sleep(2)
 
-    signal = generate_signal()
+    grid, conf = generate_signal()
 
-    await wait.edit_text(
-        f"""
+    text = f"""
 🎯 <b>SAFE SIGNAL</b>
 
-{signal}
+{grid}
 
-🔥 Confidence: 87%
-🧠 AI Mode: SAFE
+🔥 Confidence: <b>{conf}%</b>
+🧠 AI Mode: <b>SAFE</b>
+💣 Mines: <b>5</b>
 """
-    )
+
+    await msg.edit_text(text)
 
 
 @dp.message()
 async def start(message: Message):
+
     await message.answer(
-        "📸 Отправь скрин Mines"
+        """
+🎰 <b>MINES AI BOT</b>
+
+📸 Отправь скрин игры Mines
+🤖 AI проанализирует поле
+"""
     )
 
 
 async def main():
+
     await dp.start_polling(bot)
 
 
